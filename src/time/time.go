@@ -1128,6 +1128,17 @@ func (t Time) Unix() int64 {
 	return t.unixSec()
 }
 
+// UnixMills returns t as a Unix time, the number of milliseconds elapsed
+// since January 1, 1970 UTC. The result does not depend on the
+// location associated with t.
+// Unix-like operating systems often record time as a 32-bit
+// count of seconds, but since the method here returns a 64-bit
+// value it is valid for billions of years into the past or future.
+func (t Time) UnixMills() int64 {
+	return ((t.unixSec() * int64(Second/Millisecond)) +
+		(int64(t.nsec()) / int64(Millisecond/Nanosecond)))
+}
+
 // UnixNano returns t as a Unix time, the number of nanoseconds elapsed
 // since January 1, 1970 UTC. The result is undefined if the Unix time
 // in nanoseconds cannot be represented by an int64 (a date before the year
